@@ -39,7 +39,15 @@ public class Main {
                         break;
 
                     case 2:
-
+                        System.out.print("Enter title: ");
+                        String title = scanner.next();
+                        System.out.print("Enter category: ");
+                        String category = scanner.next();
+                        System.out.print("Enter amount: ");
+                        double amount = scanner.nextDouble();
+                        System.out.print("Enter date (yyyy-mm-dd): ");
+                        String date = scanner.next();
+                        expenseDAO.addExpense(new ExpenseDTO(0, title, category, amount, java.sql.Date.valueOf(date)));
                         break;
 
                     case 3:
