@@ -51,7 +51,9 @@ public class Main {
                         break;
 
                     case 3:
-
+                        System.out.print("Enter expense ID to delete: ");
+                        int expId = scanner.nextInt();
+                        expenseDAO.deleteExpense(expId);
                         break;
 
                     case 4:
