@@ -68,7 +68,13 @@ public class Main {
                         break;
 
                     case 5:
-
+                        System.out.print("Enter title: ");
+                        String incTitle = scanner.next();
+                        System.out.print("Enter amount: ");
+                        double incAmount = scanner.nextDouble();
+                        System.out.print("Enter date (yyyy-mm-dd): ");
+                        String incDate = scanner.next();
+                        incomeDAO.addIncome(new IncomeDTO(0, incTitle, incAmount, java.sql.Date.valueOf(incDate)));
                         break;
 
                     case 6:

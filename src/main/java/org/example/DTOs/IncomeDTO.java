@@ -8,10 +8,10 @@ public class IncomeDTO {
     private double amount;
     private Date dateEarned;
 
-    public IncomeDTO(int incomeID, double amount, String title, Date dateEarned) {
+    public IncomeDTO(int incomeID, String title, double amount, Date dateEarned) {
         this.incomeID = incomeID;
-        this.amount = amount;
         this.title = title;
+        this.amount = amount;
         this.dateEarned = dateEarned;
     }
 
