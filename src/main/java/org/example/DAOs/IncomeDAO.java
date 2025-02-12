@@ -31,8 +31,8 @@ public class IncomeDAO {
             while (rs.next()) {
                 incomeList.add(new IncomeDTO(
                         rs.getInt("incomeID"),
-                        rs.getDouble("amount"),
                         rs.getString("title"),
+                        rs.getDouble("amount"),
                         rs.getDate("dateEarned")
                 ));
             }
