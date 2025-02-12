@@ -4,6 +4,7 @@ import org.example.DAOs.ExpenseDAO;
 import org.example.DAOs.IncomeDAO;
 import org.example.DTOs.ExpenseDTO;
 import org.example.DTOs.IncomeDTO;
+import org.example.DAOs.FinanceDAO;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -15,6 +16,7 @@ public class Main {
         try(Connection conn = DBC.getConnection()){
             ExpenseDAO expenseDAO = new ExpenseDAO(conn);
             IncomeDAO incomeDAO = new IncomeDAO(conn);
+            FinanceDAO dao = new FinanceDAO(conn);
             Scanner scanner = new Scanner(System.in);
 
             while (true){
@@ -24,7 +26,8 @@ public class Main {
                 System.out.println("4. List all income");
                 System.out.println("5. Add income");
                 System.out.println("6. Delete income");
-                System.out.println("7. Exit");
+                System.out.println("7. Display a month for Income and Expenses");
+                System.out.println("8. Exit");
                 System.out.print("Enter your choice: ");
                 int choice = scanner.nextInt();
 
@@ -84,6 +87,21 @@ public class Main {
                         break;
 
                     case 7:
+                        System.out.print("Enter month (1-12): ");
+                        int month = scanner.nextInt();
+                        System.out.print("Enter year: ");
+                        int year = scanner.nextInt();
+
+                        System.out.println("\n=== Transactions for " + month + "/" + year + " ===");
+                        List<Object> transactions = dao.getTransactionsForMonth(month, year);
+                        for (Object transaction: transactions){
+                            System.out.println(transaction);
+                        }
+
+                        dao.getTotalSummary(month, year);
+                        break;
+
+                    case 8:
                         System.out.println("Exiting...");
                         return;
                 }
