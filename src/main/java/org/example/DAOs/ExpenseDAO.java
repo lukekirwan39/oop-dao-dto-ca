@@ -41,4 +41,12 @@ public class ExpenseDAO {
         }
         return expenses;
     }
+
+    public void deleteExpense(int expenseID) throws SQLException {
+        String sql = "DELETE FROM expenses WHERE expenseID = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setInt(1, expenseID);
+            stmt.executeUpdate();
+        }
+    }
 }
