@@ -4,7 +4,6 @@ import org.example.DBC;
 import org.example.DTOs.ExpenseDTO;
 import org.example.DTOs.IncomeDTO;
 
-import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
