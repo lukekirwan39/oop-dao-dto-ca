@@ -78,7 +78,9 @@ public class Main {
                         break;
 
                     case 6:
-
+                        System.out.print("Enter income ID to delete: ");
+                        int incId = scanner.nextInt();
+                        incomeDAO.deleteIncome(incId);
                         break;
 
                     case 7:

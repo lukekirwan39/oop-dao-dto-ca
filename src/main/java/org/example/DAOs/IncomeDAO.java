@@ -39,4 +39,12 @@ public class IncomeDAO {
         }
         return incomeList;
     }
+
+    public void deleteIncome(int incomeId) throws SQLException {
+        String sql = "DELETE FROM income WHERE incomeID = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setInt(1, incomeId);
+            stmt.executeUpdate();
+        }
+    }
 }
