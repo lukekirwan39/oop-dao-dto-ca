@@ -3,6 +3,7 @@ package org.example;
 import org.example.DAOs.ExpenseDAO;
 import org.example.DAOs.IncomeDAO;
 import org.example.DTOs.ExpenseDTO;
+import org.example.DTOs.IncomeDTO;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -57,7 +58,13 @@ public class Main {
                         break;
 
                     case 4:
-
+                        List<IncomeDTO> income = incomeDAO.getAllIncome();
+                        double totalIncome = 0;
+                        for (IncomeDTO e: income){
+                            System.out.println(e);
+                            totalIncome += e.getAmount();
+                        }
+                        System.out.println("Total expenses: €" + totalIncome);
                         break;
 
                     case 5:
