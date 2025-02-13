@@ -11,6 +11,9 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
+// GitHub Link
+// https://github.com/lukekirwan39/oop-dao-dto-ca.git
+
 public class Main {
     public static void main(String[] args) {
         try(Connection conn = DBC.getConnection()){

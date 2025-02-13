@@ -1,27 +1,34 @@
 package org.example.DAOs;
 
 import org.example.DTOs.IncomeDTO;
+import org.example.Exceptions.DaoException;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IncomeDAO {
+public class IncomeDAO implements FinanceDaoInterface{
     private final Connection conn;
 
     public IncomeDAO(Connection conn) {
         this.conn = conn;
     }
 
-    public void addIncome(IncomeDTO income) throws SQLException {
+    public void addIncome(IncomeDTO income) throws DaoException {
         String sql = "INSERT INTO income (title, amount, dateEarned) VALUES (?, ?, ?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            ;
             stmt.setString(1, income.getTitle());
             stmt.setDouble(2, income.getAmount());
             stmt.setDate(3, new java.sql.Date(income.getDateEarned().getTime()));
             stmt.executeUpdate();
+        } catch (SQLException e){
+            throw new DaoException("findAllUserResultSet() " + e.getMessage());
+        }finally {
+
         }
     }
+
 
     public List<IncomeDTO> getAllIncome() throws SQLException {
         List<IncomeDTO> incomeList = new ArrayList<>();
