@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FinanceDAO {
+public class FinanceDAO{
     private Connection conn;
 
     public FinanceDAO(Connection conn){

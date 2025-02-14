@@ -25,7 +25,7 @@ public class DBC {
         return CONNECTION;
     }
 
-    public void freeConnection(Connection connection)
+    public static void freeConnection(Connection connection)
     {
         try
         {

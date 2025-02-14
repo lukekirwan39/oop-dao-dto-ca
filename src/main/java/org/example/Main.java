@@ -36,7 +36,7 @@ public class Main {
 
                 switch (choice){
                     case 1:
-                        List<ExpenseDTO> expenses = expenseDAO.getAllExpenses();
+                        List<ExpenseDTO> expenses = expenseDAO.getAll();
                         double totalExpense = 0;
                         for (ExpenseDTO e: expenses){
                             System.out.println(e);
@@ -54,17 +54,17 @@ public class Main {
                         double amount = scanner.nextDouble();
                         System.out.print("Enter date (yyyy-mm-dd): ");
                         String date = scanner.next();
-                        expenseDAO.addExpense(new ExpenseDTO(0, title, category, amount, java.sql.Date.valueOf(date)));
+                        expenseDAO.add(new ExpenseDTO(0, title, category, amount, java.sql.Date.valueOf(date)));
                         break;
 
                     case 3:
                         System.out.print("Enter expense ID to delete: ");
                         int expId = scanner.nextInt();
-                        expenseDAO.deleteExpense(expId);
+                        expenseDAO.delete(expId);
                         break;
 
                     case 4:
-                        List<IncomeDTO> income = incomeDAO.getAllIncome();
+                        List<IncomeDTO> income = incomeDAO.getAll();
                         double totalIncome = 0;
                         for (IncomeDTO e: income){
                             System.out.println(e);
@@ -80,13 +80,13 @@ public class Main {
                         double incAmount = scanner.nextDouble();
                         System.out.print("Enter date (yyyy-mm-dd): ");
                         String incDate = scanner.next();
-                        incomeDAO.addIncome(new IncomeDTO(0, incTitle, incAmount, java.sql.Date.valueOf(incDate)));
+                        incomeDAO.add(new IncomeDTO(0, incTitle, incAmount, java.sql.Date.valueOf(incDate)));
                         break;
 
                     case 6:
                         System.out.print("Enter income ID to delete: ");
                         int incId = scanner.nextInt();
-                        incomeDAO.deleteIncome(incId);
+                        incomeDAO.delete(incId);
                         break;
 
                     case 7:
