@@ -1,10 +1,8 @@
 package org.example;
 
-import org.example.DAOs.ExpenseDAO;
-import org.example.DAOs.IncomeDAO;
+import org.example.DAOs.*;
 import org.example.DTOs.ExpenseDTO;
 import org.example.DTOs.IncomeDTO;
-import org.example.DAOs.FinanceDAO;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -16,13 +14,17 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        try(Connection conn = DBC.getConnection()){
-            ExpenseDAO expenseDAO = new ExpenseDAO(conn);
-            IncomeDAO incomeDAO = new IncomeDAO(conn);
-            FinanceDAO dao = new FinanceDAO(conn);
+        try (Connection conn = DBC.getConnection()) {
+            ExpenseDaoInterface eDaoInterface = new ExpenseDAO(conn);
+            IncomeDaoInterface iDaoInterface = new IncomeDAO(conn);
+            FinanceDaoInterface fDaoInterface = new FinanceDAO(conn);
+
+//            ExpenseDAO expenseDAO = new ExpenseDAO(conn);
+//            IncomeDAO incomeDAO = new IncomeDAO(conn);
+//            FinanceDAO dao = new FinanceDAO(conn);
             Scanner scanner = new Scanner(System.in);
 
-            while (true){
+            while (true) {
                 System.out.println("\n1. List all expenses");
                 System.out.println("2. Add an expense");
                 System.out.println("3. Delete an expense");
@@ -34,11 +36,11 @@ public class Main {
                 System.out.print("Enter your choice: ");
                 int choice = scanner.nextInt();
 
-                switch (choice){
+                switch (choice) {
                     case 1:
-                        List<ExpenseDTO> expenses = expenseDAO.getAll();
+                        List<ExpenseDTO> expenses = eDaoInterface.getAll();
                         double totalExpense = 0;
-                        for (ExpenseDTO e: expenses){
+                        for (ExpenseDTO e : expenses) {
                             System.out.println(e);
                             totalExpense += e.getAmount();
                         }
@@ -54,19 +56,19 @@ public class Main {
                         double amount = scanner.nextDouble();
                         System.out.print("Enter date (yyyy-mm-dd): ");
                         String date = scanner.next();
-                        expenseDAO.add(new ExpenseDTO(0, title, category, amount, java.sql.Date.valueOf(date)));
+                        eDaoInterface.add(new ExpenseDTO(0, title, category, amount, java.sql.Date.valueOf(date)));
                         break;
 
                     case 3:
                         System.out.print("Enter expense ID to delete: ");
                         int expId = scanner.nextInt();
-                        expenseDAO.delete(expId);
+                        eDaoInterface.delete(expId);
                         break;
 
                     case 4:
-                        List<IncomeDTO> income = incomeDAO.getAll();
+                        List<IncomeDTO> income = iDaoInterface.getAll();
                         double totalIncome = 0;
-                        for (IncomeDTO e: income){
+                        for (IncomeDTO e : income) {
                             System.out.println(e);
                             totalIncome += e.getAmount();
                         }
@@ -80,13 +82,13 @@ public class Main {
                         double incAmount = scanner.nextDouble();
                         System.out.print("Enter date (yyyy-mm-dd): ");
                         String incDate = scanner.next();
-                        incomeDAO.add(new IncomeDTO(0, incTitle, incAmount, java.sql.Date.valueOf(incDate)));
+                        iDaoInterface.add(new IncomeDTO(0, incTitle, incAmount, java.sql.Date.valueOf(incDate)));
                         break;
 
                     case 6:
                         System.out.print("Enter income ID to delete: ");
                         int incId = scanner.nextInt();
-                        incomeDAO.delete(incId);
+                        iDaoInterface.delete(incId);
                         break;
 
                     case 7:
@@ -96,12 +98,12 @@ public class Main {
                         int year = scanner.nextInt();
 
                         System.out.println("\n=== Transactions for " + month + "/" + year + " ===");
-                        List<Object> transactions = dao.getTransactionsForMonth(month, year);
-                        for (Object transaction: transactions){
+                        List<Object> transactions = fDaoInterface.getTransactionsForMonth(month, year);
+                        for (Object transaction : transactions) {
                             System.out.println(transaction);
                         }
 
-                        dao.getTotalSummary(month, year);
+                        fDaoInterface.getTotalSummary(month, year);
                         break;
 
                     case 8:

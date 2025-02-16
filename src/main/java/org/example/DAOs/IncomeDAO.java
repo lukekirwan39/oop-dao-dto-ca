@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IncomeDAO implements FinanceDaoInterface<IncomeDTO>{
+public class IncomeDAO implements IncomeDaoInterface {
     private Connection conn;
 
     public IncomeDAO(Connection conn) {
@@ -16,40 +16,15 @@ public class IncomeDAO implements FinanceDaoInterface<IncomeDTO>{
     }
 
     @Override
-    public void add(IncomeDTO income) throws DaoException {
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        try {
+    public void add(IncomeDTO income) throws SQLException {
+        conn = DBC.getConnection();
+        String sql = "INSERT INTO income (title, amount, dateEarned) VALUES (?, ?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, income.getTitle());
+            stmt.setDouble(2, income.getAmount());
+            stmt.setDate(3, new java.sql.Date(income.getDateEarned().getTime()));
+            stmt.executeUpdate();
 
-            conn = DBC.getConnection();
-
-            String sql = "INSERT INTO income (title, amount, dateEarned) VALUES (?, ?, ?)";
-
-            stmt = conn.prepareStatement(sql);
-            rs = stmt.executeQuery();
-
-            while (rs.next()){
-                stmt.setString(1, income.getTitle());
-                stmt.setDouble(2, income.getAmount());
-                stmt.setDate(3, new java.sql.Date(income.getDateEarned().getTime()));
-                stmt.executeUpdate();
-            }
-        } catch (SQLException e){
-            throw new DaoException("add() " + e.getMessage());
-        }finally {
-            try {
-                if (rs != null){
-                    rs.close();
-                }
-                if (stmt != null){
-                    stmt.close();
-                }
-                if (conn != null){
-                    DBC.freeConnection(conn);
-                }
-            }catch (SQLException e){
-                throw new DaoException("add() " + e.getMessage());
-            }
         }
     }
 
@@ -67,7 +42,7 @@ public class IncomeDAO implements FinanceDaoInterface<IncomeDTO>{
                         rs.getDate("dateEarned")
                 ));
             }
-        } catch (SQLException e){
+        } catch (SQLException e) {
             throw new DaoException("getAll() " + e.getMessage());
         }
         return incomeList;
@@ -76,10 +51,10 @@ public class IncomeDAO implements FinanceDaoInterface<IncomeDTO>{
     @Override
     public void delete(int incomeId) throws SQLException {
         String sql = "DELETE FROM income WHERE incomeID = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)){
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, incomeId);
             stmt.executeUpdate();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             throw new DaoException("delete() " + e.getMessage());
         }
     }

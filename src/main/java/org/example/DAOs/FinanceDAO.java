@@ -8,13 +8,14 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FinanceDAO{
+public class FinanceDAO implements FinanceDaoInterface {
     private Connection conn;
 
-    public FinanceDAO(Connection conn){
+    public FinanceDAO(Connection conn) {
         this.conn = conn;
     }
 
+    @Override
     public List<Object> getTransactionsForMonth(int month, int year) {
         List<Object> transactions = new ArrayList<>();
         // https://stackoverflow.com/questions/70101884/sql-query-to-determine-income-statement
@@ -31,8 +32,8 @@ public class FinanceDAO{
                 "SELECT * FROM expense_summary " +
                 "ORDER BY Date";
 
-        try(Connection conn = DBC.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DBC.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, month);
             stmt.setInt(2, year);
             stmt.setInt(3, month);
@@ -59,31 +60,26 @@ public class FinanceDAO{
         return transactions;
     }
 
-    public void getTotalSummary(int month, int year){
+    @Override
+    public void getTotalSummary(int month, int year) {
         // https://stackoverflow.com/questions/63104790/calculating-income-expenses-using-3-tables-in-sql
         // Used for the sql code
         String sql = "SELECT " +
-                "COALESCE(SUM(i.amount), 0) AS Total_Income, " +
-                "COALESCE(SUM(e.amount), 0) AS Total_Expenses, " +
-                "(COALESCE(SUM(i.amount), 0) - COALESCE(SUM(e.amount), 0)) AS Remaining_Balance " +
-                "FROM income i " +
-                "LEFT JOIN expenses e ON MONTH(i.dateEarned) = MONTH(e.dateIncurred) " +
-                "AND YEAR(i.dateEarned) = YEAR(e.dateIncurred) " +
-                "WHERE (MONTH(i.dateEarned) = ? AND YEAR(i.dateEarned) = ?) " +
-                "OR (MONTH(e.dateIncurred) = ? AND YEAR(e.dateIncurred) = ?)";
+                "(SELECT COALESCE(SUM(amount), 0) FROM income WHERE MONTH(dateEarned) = ? AND YEAR(dateEarned) = ?) AS Total_Income, " +
+                "(SELECT COALESCE(SUM(amount), 0) FROM expenses WHERE MONTH(dateIncurred) = ? AND YEAR(dateIncurred) = ?) AS Total_Expenses";
 
         try (Connection conn = DBC.getConnection();
-        PreparedStatement stmt = conn.prepareStatement(sql)){
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, month);
             stmt.setInt(2, year);
             stmt.setInt(3, month);
             stmt.setInt(4, year);
 
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()){
+            if (rs.next()) {
                 double totalIncome = rs.getDouble("Total_Income");
                 double totalExpenses = rs.getDouble("Total_Expenses");
-                double remainingBalance = rs.getDouble("Remaining_Balance");
+                double remainingBalance = totalIncome - totalExpenses;
 
                 System.out.println("\n=== Monthly Financial Summary ===");
                 System.out.println("Total Income: €" + totalIncome);

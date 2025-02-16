@@ -15,27 +15,22 @@ public class DBC {
         try {
             Class.forName(DRIVER);
             CONNECTION = DriverManager.getConnection(URL, USER, PASSWORD);
-        }catch (ClassNotFoundException e){
+        } catch (ClassNotFoundException e) {
             System.out.println("Failed to find driver class " + e.getMessage());
             System.exit(1);
-        }catch (SQLException e){
-            System.out.println("Connection failed "+e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("Connection failed " + e.getMessage());
             System.exit(2);
         }
         return CONNECTION;
     }
 
-    public static void freeConnection(Connection connection)
-    {
-        try
-        {
-            if (connection != null)
-            {
+    public static void freeConnection(Connection connection) {
+        try {
+            if (connection != null) {
                 connection.close();
             }
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             System.out.println("Failed to free connection: " + e.getMessage());
             System.exit(1);
         }

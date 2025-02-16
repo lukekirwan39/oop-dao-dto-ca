@@ -1,17 +1,17 @@
 package org.example.DAOs;
 
-import org.example.DTOs.ExpenseDTO;
-import org.example.DTOs.IncomeDTO;
-
-import java.sql.SQLException;
 import java.util.List;
 
-public interface FinanceDaoInterface<T> {
+public interface FinanceDaoInterface {
 
-    void add(T finance) throws SQLException;
+//    void add(T finance) throws SQLException;
+//
+//    List<T> getAll() throws SQLException;
+//
+//    void delete(int id) throws SQLException;
 
-    List<T> getAll() throws SQLException;
+    List<Object> getTransactionsForMonth(int month, int year);
 
-    void delete(int id) throws SQLException;
+    void getTotalSummary(int month, int year);
 
 }
